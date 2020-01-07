@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
 // Redux
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addContato } from "../../redux/actions/actions";
 
 import {
@@ -13,50 +12,46 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
-  TextField,
-  FormControl,
-  makeStyles
+  TextField
 } from "@material-ui/core";
 import "@material-ui/icons";
 
-const useStyles = makeStyles(theme => ({
-  margin: {
-    margin: theme.spacing(1)
-  }
-}));
-
 const Header = props => {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefone, setTelefone] = useState("");
 
-  const {
-    addContato,
-    contatos: { nome, email, telefone }
-  } = props;
+  const [form, setState] = useState({
+    nome: "",
+    email: "",
+    telefone: ""
+  });
 
-  // const classes = useStyles();
-
-  /**********************************/
   const clickAdicionar = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const salvarContato = e => {
+    e.preventDefault();
+    if (form.nome.trim() === "") return null;
+    dispatch(
+      addContato({
+        nome: form.nome,
+        email: form.email,
+        telefone: form.telefone
+      })
+    );
+    // setNome("");
+    //setEmail("");
+    // setTelefone("");
     setOpen(false);
   };
 
-  const salvar = () => {
-    addContato({ nome: newnome, email, telefone });
-    setOpen(false);
-  };
-
-  inputChange = event => {
+  const updateField = e => {
     setState({
-      newnome: event.target.value
+      ...form,
+      [e.target.name]: e.target.value
     });
   };
 
@@ -74,7 +69,7 @@ const Header = props => {
 
           <Dialog
             open={open}
-            onClose={handleClose}
+            onClose={() => setOpen(false)}
             aria-labelledby="form-dialog-title"
           >
             <DialogTitle id="form-dialog-title">Criar novo contato</DialogTitle>
@@ -86,9 +81,9 @@ const Header = props => {
                 label="Nome"
                 type="text"
                 fullWidth
-                onChange={inputChange}
-                type="text"
-                value={nome}
+                name="nome"
+                value={form.nome}
+                onChange={updateField}
               />
 
               <TextField
@@ -97,6 +92,9 @@ const Header = props => {
                 label="E-mail"
                 type="email"
                 fullWidth
+                name="email"
+                value={form.email}
+                onChange={updateField}
               />
               <TextField
                 margin="dense"
@@ -104,13 +102,16 @@ const Header = props => {
                 label="Fone"
                 type="text"
                 fullWidth
+                name="telefone"
+                value={form.telefone}
+                onChange={updateField}
               />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={() => setOpen(false)} color="primary">
                 Cancelar
               </Button>
-              <Button onClick={salvar} color="primary">
+              <Button onClick={salvarContato} color="primary">
                 Salvar
               </Button>
             </DialogActions>
@@ -120,13 +121,13 @@ const Header = props => {
     </div>
   );
 };
-
+/*
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ addContato }, dispatch);
 
 const mapStateToProps = store => ({
   contatos: store.contatoReducer.contatos
-});
+});*/
 
 //export default Header;
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;
