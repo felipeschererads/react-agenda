@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 
 // Redux
-import { useDispatch } from "react-redux";
-import { addContato } from "../../redux/actions/actions";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Creators as ContatoActions } from "../../redux/ducs/contatos";
 
 import {
   AppBar,
@@ -19,6 +20,7 @@ import "@material-ui/icons";
 
 const Header = props => {
   const dispatch = useDispatch();
+  const contatos = useSelector(state => state.contatoReducer.data);
 
   const [open, setOpen] = useState(false);
 
@@ -36,15 +38,19 @@ const Header = props => {
     e.preventDefault();
     if (form.nome.trim() === "") return null;
     dispatch(
-      addContato({
-        nome: form.nome,
-        email: form.email,
-        telefone: form.telefone
-      })
+      ContatoActions.addContato(
+        /*{
+          nome: "zx",
+          email: "xcz",
+          telefone: "xzccxz"
+        }*/
+        {
+          nome: form.nome,
+          email: form.email,
+          telefone: form.telefone
+        }
+      )
     );
-    // setNome("");
-    //setEmail("");
-    // setTelefone("");
     setOpen(false);
   };
 

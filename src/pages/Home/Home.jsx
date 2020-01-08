@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-//import { withRouter } from "react-router-dom";
 import ContatoList from "../../components/ContatoList/ContatoList";
+import SearchContato from "../../components/SearchContato/SearchContato";
 
 const Home = props => {
   const { contatos } = props;
@@ -10,6 +10,7 @@ const Home = props => {
 
   return (
     <>
+      <SearchContato />
       <ContatoList contatos={contatos} />
     </>
   );
