@@ -3,6 +3,11 @@ import { createStore } from "redux";
 import Reducers from "./ducs/reducers";
 import storeSynchronize from "redux-localstore";
 
-export const Store = createStore(Reducers);
+//extensão para monitorar o estado do Redux (REDUX_DEVTOOLS_EXTENSION)
+
+export const Store = createStore(
+  Reducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 storeSynchronize(Store);

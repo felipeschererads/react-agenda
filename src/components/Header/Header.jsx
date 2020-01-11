@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
+import InputMask from "react-input-mask";
 
 import { Creators as ContatoActions } from "../../redux/ducs/contatos";
 
@@ -20,7 +21,8 @@ import "@material-ui/icons";
 
 const Header = props => {
   const dispatch = useDispatch();
-  const contatos = useSelector(state => state.contatoReducer.data);
+
+  //const contatos = useSelector(state => state.contatoReducer.data);
 
   const [open, setOpen] = useState(false);
 
@@ -38,18 +40,11 @@ const Header = props => {
     e.preventDefault();
     if (form.nome.trim() === "") return null;
     dispatch(
-      ContatoActions.addContato(
-        /*{
-          nome: "zx",
-          email: "xcz",
-          telefone: "xzccxz"
-        }*/
-        {
-          nome: form.nome,
-          email: form.email,
-          telefone: form.telefone
-        }
-      )
+      ContatoActions.addContato({
+        nome: form.nome,
+        email: form.email,
+        telefone: form.telefone
+      })
     );
     setOpen(false);
   };
@@ -60,6 +55,8 @@ const Header = props => {
       [e.target.name]: e.target.value
     });
   };
+
+  const classes = props.classes;
 
   /**********************************/
   //aplicar mask de fone
@@ -102,6 +99,7 @@ const Header = props => {
                 value={form.email}
                 onChange={updateField}
               />
+
               <TextField
                 margin="dense"
                 id="telefone"
@@ -111,7 +109,9 @@ const Header = props => {
                 name="telefone"
                 value={form.telefone}
                 onChange={updateField}
-              />
+              >
+                <InputMask mask="(99) 9 9999-9999" maskChar=" " />
+              </TextField>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setOpen(false)} color="primary">

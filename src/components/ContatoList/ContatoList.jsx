@@ -7,10 +7,15 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 
-const ContatoList = props => {
-  const contatos = useSelector(state => state.contatoReducer.data);
+const ContatoList = ({ contatos, filtro }) => {
+  const dados = contatos.filter(function(contato) {
+    return (
+      contato.nome.indexOf(filtro) !== -1 ||
+      contato.email.indexOf(filtro) !== -1
+    );
+  });
 
   return (
     <TableContainer component={Paper}>
@@ -23,7 +28,7 @@ const ContatoList = props => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {contatos.map(row => (
+          {dados.map(row => (
             <TableRow key={row.nome}>
               <TableCell component="th" scope="row">
                 {row.nome}
@@ -42,4 +47,9 @@ const ContatoList = props => {
   );
 };
 
-export default ContatoList;
+const mapStateToProps = store => ({
+  contatos: store.contatoReducer.data,
+  filtro: store.contatoReducer.filtro
+});
+
+export default connect(mapStateToProps)(ContatoList);

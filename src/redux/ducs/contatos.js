@@ -1,22 +1,24 @@
 import { defineState } from "redux-localstore";
 
 export const Types = {
-  ADD: "contato/ADD"
+  ADD: "contato/ADD",
+  FILTRO: "contato/FILTRO"
 };
 
 const defaultState = {
   data: [
     {
-      nome: "Felipe",
-      email: "felipescherer@gmail.com",
-      telefone: "(54) 99123-3114"
+      nome: "Contato 1",
+      email: "contact1@gmail.com",
+      telefone: "(54) 0000-0000"
     },
     {
-      nome: "Karin",
-      email: "karin@gmail.com",
-      telefone: "(54) 99123-3114"
+      nome: "Contato 2",
+      email: "contact2@gmail.com",
+      telefone: "(54) 1111-1111"
     }
-  ]
+  ],
+  filtro: ""
 };
 
 //actions
@@ -26,11 +28,18 @@ export const contatoReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case Types.ADD:
       console.log("ADD_CONTATO:" + action.payload);
-
       return {
         ...state,
         data: [...state.data, action.payload.contato]
       };
+
+    case Types.FILTRO:
+      return {
+        ...state,
+        filtro: action.payload.filtro,
+        data: [...state.data]
+      };
+
     default:
       return state;
   }
@@ -41,6 +50,13 @@ export const Creators = {
     type: Types.ADD,
     payload: {
       contato
+    }
+  }),
+
+  filtroContato: filtro => ({
+    type: Types.FILTRO,
+    payload: {
+      filtro
     }
   })
 };

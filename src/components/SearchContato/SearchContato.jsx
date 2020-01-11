@@ -1,23 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { TextField } from "@material-ui/core";
-import { AccountCircle } from "@material-ui/icons";
+import { connect } from "react-redux";
 
-const SearchContato = props => {
-  //const [open, setOpen] = React.useState(false);
+import { Creators as ContatoActions } from "../../redux/ducs/contatos";
+
+const SearchContato = ({ dispatch }) => {
+  const [form, setState] = useState({
+    filtro: ""
+  });
+
+  const updateField = e => {
+    setState({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+    dispatch(ContatoActions.filtroContato(e.target.value));
+  };
 
   return (
-    <TextField
-      id="standard-full-width"
-      label="Contato"
-      style={{ margin: 8 }}
-      placeholder="Digite..."
-      fullWidth
-      margin="normal"
-      InputLabelProps={{
-        shrink: true
-      }}
-    />
+    <form>
+      <TextField
+        id="standard-full-width"
+        label="Contato"
+        style={{ margin: 8 }}
+        placeholder="Buscar..."
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true
+        }}
+        name="filtro"
+        value={form.filtro}
+        onChange={updateField}
+      />
+    </form>
   );
 };
 
-export default SearchContato;
+export default connect()(SearchContato);
